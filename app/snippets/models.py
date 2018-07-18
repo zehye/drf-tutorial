@@ -17,3 +17,25 @@ class Snippet(models.Model):
 
     class Meta:
         ordering = ('created',)
+
+
+# class SnippetSerializer2:
+#     pk = None
+#     title = None
+#     code = None
+#
+#     def __init__(self, instance):
+#         if hasattr(instance, 'pk'):
+#             self.pk = instance.pk
+#         if hasattr(instance, 'title'):
+#             self.title = instance.title
+#         if hasattr(instance, 'code'):
+#             self.code = instance.code
+#
+#     @property
+#     def data(self):
+#         return {
+#             'pk': self.pk,
+#             'title': self.title,
+#             'code': self.code
+#         }
