@@ -12,7 +12,7 @@ class SnippetListTest(APITestCase):
     """
     Snippet List요청에 대한 테스트
     """
-    def test_status_code(self):
+    def test_snippet_code(self):
         """
         요청 결과의 HTTP상태코드가 200인지 확인
         :return:
@@ -72,3 +72,25 @@ class SnippetListTest(APITestCase):
             # DB에서 created역순으로 Pk값만 가져온 QuerySet으로 만든 리스트
             list(Snippet.objects.order_by('-created').values_list('pk', flat=True))
         )
+
+
+class SnippetCreateTest(APITestCase):
+    def test_snippet_create_status_code(self):
+        """
+        201이 들어가는지 확인
+        :return:
+        """
+        pass
+
+    def test_snippet_create_save_db(self):
+        """
+        요청 후 실제 DB에 저장되었는지(모든 필드값이 정상적으로 저장되는지 확인)
+        :return:
+        """
+        pass
+
+    def test_snippet_create_missing_code_raise_exception(self):
+        """
+        'code'데이터가 주어지지 않을 경우 적절한 Exception이 발생하는지 확인
+        :return:
+        """
