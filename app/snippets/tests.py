@@ -12,12 +12,15 @@ class SnippetListTest(APITestCase):
     """
     Snippet List요청에 대한 테스트
     """
+
+    URL = '/snippets/django_view/snippets/'
+
     def test_snippet_code(self):
         """
         요청 결과의 HTTP상태코드가 200인지 확인
         :return:
         """
-        response = self.client.get('/snippets/django_view/snippets/')
+        response = self.client.get(self.URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_snippet_list_count(self):
@@ -35,7 +38,7 @@ class SnippetListTest(APITestCase):
         for i in range(random.randint(10, 100)):
             Snippet.objects.create(code=f'a = {i}')
         # response.content 는 byte string 으로 json 형식의 파일이다.
-        response = self.client.get('/snippets/django_view/snippets/')
+        response = self.client.get(self.URL)
 
         # 파이썬 형식으로 변환 (string)
         data = json.loads(response.content)
@@ -52,7 +55,7 @@ class SnippetListTest(APITestCase):
         for i in range(random.randint(5, 10)):
             Snippet.objects.create(code=f'a = {i}')
 
-        response = self.client.get('/snippets/django_view/snippets/')
+        response = self.client.get(self.URL)
         data = json.loads(response.content)
         # snippets = Snippet.objects.order_by('-created')
 
@@ -81,6 +84,7 @@ CREATE_DATA = '''{
 
 
 class SnippetCreateTest(APITestCase):
+    URL = '/snippets/generic_cbv/snippets/'
     def test_snippet_create_status_code(self):
         """
         201이 들어가는지 확인
@@ -94,7 +98,7 @@ class SnippetCreateTest(APITestCase):
         # self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         response = self.client.post(
-            '/snippets/django_view/snippets/',
+            self.URL,
             data={'code': "print('hello, world')"},
             format='json',
         )
@@ -115,7 +119,7 @@ class SnippetCreateTest(APITestCase):
         }
 
         response = self.client.post(
-            '/snippets/django_view/snippets/',
+            self.URL,
             data=snippet_data,
             format='json',
         )
@@ -146,7 +150,7 @@ class SnippetCreateTest(APITestCase):
         }
 
         response = self.client.post(
-            '/snippets/django_view/snippets/',
+            self.URL,
             data=snippet_data,
             format='json',
         )
