@@ -1,11 +1,13 @@
 import json
 import random
 
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 
 from .models import Snippet
+User = get_user_model
 
 
 class SnippetListTest(APITestCase):
@@ -20,6 +22,7 @@ class SnippetListTest(APITestCase):
         요청 결과의 HTTP상태코드가 200인지 확인
         :return:
         """
+
         response = self.client.get(self.URL)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -35,8 +38,12 @@ class SnippetListTest(APITestCase):
         """
         # snippet = Snippet(code='print "hello"\n')
         # snippet.save()
+        user = User.objects.create_user(username='jihye')
         for i in range(random.randint(10, 100)):
-            Snippet.objects.create(code=f'a = {i}')
+            Snippet.objects.create(
+                code=f'a = {i}',
+                owner=user,
+            )
         # response.content 는 byte string 으로 json 형식의 파일이다.
         response = self.client.get(self.URL)
 
@@ -52,8 +59,12 @@ class SnippetListTest(APITestCase):
         Snippet list의 결과가 생성일자 내림차순인지 확인
         :return:
         """
+        user = User.objects.create_user(username='jihye')
         for i in range(random.randint(5, 10)):
-            Snippet.objects.create(code=f'a = {i}')
+            Snippet.objects.create(
+                code=f'a = {i}',
+                owner=user,
+            )
 
         response = self.client.get(self.URL)
         data = json.loads(response.content)

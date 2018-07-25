@@ -10,16 +10,6 @@ __all__ = (
 )
 
 
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            'pk',
-            'username',
-            'snippets',
-        )
-
-
 class SnippetSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
 
@@ -37,6 +27,16 @@ class SnippetSerializer(serializers.ModelSerializer):
         # 읽기전용으로 처리가 된다.
         read_only_fields = (
             'owner',
+        )
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'pk',
+            'username',
+            'snippets',
         )
 
 
