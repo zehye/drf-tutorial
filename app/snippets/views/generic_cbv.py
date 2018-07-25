@@ -1,8 +1,9 @@
 from django.contrib.auth.models import User
-from rest_framework import generics
+from rest_framework import generics, permissions
 
 from ..models import Snippet
 from snippets.serializer import SnippetSerializer, UserSerializer
+from ..permissions import IsOwnerOrReadOnly
 
 
 __all__ = (
@@ -16,6 +17,7 @@ __all__ = (
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def perform_create(self, serializer):
         # SnippetSerializer 로 전달받은 데이터와
@@ -27,6 +29,8 @@ class SnippetList(generics.ListCreateAPIView):
 class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)
 
 
 class UserList(generics.ListAPIView):
