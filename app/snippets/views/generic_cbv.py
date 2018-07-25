@@ -1,8 +1,10 @@
 from django.contrib.auth.models import User
 from rest_framework import generics, permissions
+from rest_framework.pagination import PageNumberPagination
 
+from utils.pagination import SnippetListPagination
 from ..models import Snippet
-from snippets.serializer import SnippetListSerializer, UserBaseSerializer, UserDetailSerializer
+from snippets.serializer import SnippetListSerializer, UserListSerializer, SnippetDetailSerializer
 from ..permissions import IsOwnerOrReadOnly
 
 
@@ -16,8 +18,14 @@ __all__ = (
 
 class SnippetList(generics.ListCreateAPIView):
     queryset = Snippet.objects.all()
-    serializer_class = SnippetListSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    pagination_class = SnippetListPagination
+
+    def get_serializer_class(self):
+        if self.request.method == 'GET':
+            return SnippetListSerializer
+        elif self.request.method == 'POST':
+            return SnippetDetailSerializer
 
     def perform_create(self, serializer):
         # SnippetListSerializer 로 전달받은 데이터와
@@ -37,9 +45,9 @@ class SnippetDetail(generics.RetrieveUpdateDestroyAPIView):
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
-    serializer_class = UserBaseSerializer
+    serializer_class = UserListSerializer
 
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
-    serializer_class = UserDetailSerializer
+    serializer_class = UserListSerializer
