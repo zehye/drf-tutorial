@@ -25,7 +25,7 @@ class Snippet(models.Model):
     highlighted = models.TextField()
 
     class Meta:
-        ordering = ('created',)
+        ordering = ('-created',)
 
     def save(self, *args, **kwargs):
         # 이렇게하면 HTML이 저장됩니다.
